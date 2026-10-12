@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المحمية الزراعية الذكية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --primary: #00885a;
+  --primary-dark: #059669;
+  --bg-color: #f0fdf4;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --blue: #3b82f6;
+  --border-radius: 16px;
+  --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Cairo', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  padding: 20px 12px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #065f46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+#conn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ok { color: var(--primary-dark); }
+.bad { color: var(--danger); }
+
+#warn {
+  display: none;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card h2 {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.card .icon {
+  font-size: 18px;
+  color: var(--primary);
+  background: #ecfdf5;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.big {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+/* شريط الإضاءة */
+.bar {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* لوحة التحكم */
+.control-title {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+  margin-bottom: 12px;
+}
+
+.mode {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.mode button {
+  flex: 1;
+  border: 0;
+  padding: 10px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode button.active {
+  background: var(--card-bg);
+  color: var(--blue);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #f1f5f9;
+}
+
+.row-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.row-info i {
+  color: var(--text-muted);
+  width: 18px;
+}
+
+.row b {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.row button {
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.row button:hover {
+  background: #e2e8f0;
+}
+
+.row button.sel-on {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+.row button.sel-off {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+}
+
+/* التحديث الأخير */
+.footer-card {
+  padding: 10px;
+  text-align: center;
+}
+
+.footer-card .sub {
+  margin-top: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1><i class="fa-solid fa-seedling"></i> المحمية الزراعية الذكية</h1>
+    <span id="conn"><i class="fa-solid fa-spinner fa-spin"></i> جار الاتصال بالسحابة...</span>
+  </header>
+
+  <div id="warn"><i class="fa-solid fa-triangle-exclamation"></i> تم ايقاف تشغيل المضخة: نسبة الماء 0%</div>
+
+  <div class="grid">
+    <!-- درجة الحرارة -->
+    <div class="card">
+      <div class="card-header">
+        <h2>درجة الحرارة</h2>
+        <div class="icon"><i class="fa-solid fa-temperature-half"></i></div>
+      </div>
+      <div class="big"><span id="t">--</span> °C</div>
+    </div>
+
+    <!-- رطوبة الجو -->
+    <div class="card">
+      <div class="card-header">
+        <h2>رطوبة الجو</h2>
+        <div class="icon"><i class="fa-solid fa-droplet"></i></div>
+      </div>
+      <div class="big"><span id="h">--</span> %</div>
+    </div>
+
+    <!-- رطوبة التربة -->
+    <div class="card">
+      <div class="card-header">
+        <h2>رطوبة التربة</h2>
+        <div class="icon"><i class="fa-solid fa-plant-wilt"></i></div>
+      </div>
+      <div class="big"><span id="soil">--</span> %</div>
+      <div class="sub" id="soilSt"></div>
+    </div>
+
+    <!-- نسبة الماء بالخزان -->
+    <div class="card">
+      <div class="card-header">
+        <h2>نسبة الماء بالخزان</h2>
+        <div class="icon"><div style="font-size:16px"><i class="fa-solid fa-glass-water"></i></div></div>
+      </div>
+      <div class="big"><span id="water">--</span></div>
+    </div>
+
+    <!-- الإضاءة اليومية -->
+    <div class="card full">
+      <div class="card-header">
+        <h2>الإضاءة اليومية للنبات (المطلوب 10 ساعات)</h2>
+        <div class="icon"><i class="fa-solid fa-sun"></i></div>
+      </div>
+      <div class="big" id="lightTot">--</div>
+      <div class="sub" id="lightSub"></div>
+      <div class="bar"><i id="bar"></i></div>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div class="card full">
+      <h2 class="control-title"><i class="fa-solid fa-sliders"></i> لوحة التحكم</h2>
+      <div class="mode">
+        <button id="mA" onclick="setMode(1)"><i class="fa-solid fa-robot"></i> تلقائي ذكي</button>
+        <button id="mM" onclick="setMode(0)"><i class="fa-solid fa-hand"></i> يدوي</button>
+      </div>
+
+      <div class="row">
+        <div class="row-info">
+          <i class="fa-solid fa-faucet-drip"></i>
+          <span>المضخة <b id="pumpSt">--</b></span>
+        </div>
+        <div class="btn-group">
+          <button id="pumpOn" onclick="ctrl('pump',1)">تشغيل</button>
+          <button id="pumpOff" onclick="ctrl('pump',0)">ايقاف</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-info">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span>اللمبة <b id="ledSt">--</b></span>
+        </div>
+        <div class="btn-group">
+          <button id="ledOn" onclick="ctrl('led',1)">تشغيل</button>
+          <button id="ledOff" onclick="ctrl('led',0)">ايقاف</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-info">
+          <i class="fa-solid fa-fan"></i>
+          <span>المروحة <b id="fanSt">--</b></span>
+        </div>
+        <div class="btn-group">
+          <button id="fanOn" onclick="ctrl('fan',1)">تشغيل</button>
+          <button id="fanOff" onclick="ctrl('fan',0)">ايقاف</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- آخر تحديث -->
+    <div class="card full footer-card">
+      <div class="sub" id="upd"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var DB = "https://greenhousesmart-155db-default-rtdb.firebaseio.com/greenhouse";
+
+function el(i){return document.getElementById(i);}
+function mark(a,b,s){el(a).className=s?'sel-on':'';el(b).className=s?'':'sel-off';}
+
+function refresh(){
+fetch(DB+"/sensors.json",{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
+if(!d||d===null){return;}
+el('conn').innerHTML='<i class="fa-solid fa-circle-check"></i> متصل بالسحابة';el('conn').className='ok';
+el('t').textContent=(d.temp===null||d.temp===undefined)?'--':Number(d.temp).toFixed(1);
+el('h').textContent=(d.humidity===null||d.humidity===undefined)?'--':Number(d.humidity).toFixed(0);
+el('soil').textContent=d.soil+'%';
+el('soilSt').textContent=(d.warn?'':'')+((d.soil<=30)?'جافة - تحتاج ري':'رطبة كافية (قراءة '+d.soilRaw+')');
+el('water').textContent=(d.water<0)?'غير معروف':d.water+'%';
+el('warn').style.display=d.warn?'block':'none';
+var tot=Number(d.totH),target=10;
+el('lightTot').textContent=tot.toFixed(1)+' / '+target+' ساعات';
+el('lightSub').textContent='ضوء طبيعي: '+Number(d.natH).toFixed(1)+' ساعة | تعويض اللمبة: '+Number(d.ledH).toFixed(1)+' ساعة'+(d.light?' | في الخارج ضوء الآن':' | مظلم الآن');
+el('bar').style.width=Math.min(100,Math.round(tot/target*100))+'%';
+el('pumpSt').textContent=d.pump?'تعمل':'متوقفة';
+el('ledSt').textContent=d.led?'مضيئة':'مطفأة';
+el('fanSt').textContent=d.fan?'تعمل':'متوقفة';
+el('mA').className=d.auto?'active':'';
+el('mM').className=d.auto?'':'active';
+mark('pumpOn','pumpOff',d.pump);
+mark('ledOn','ledOff',d.led);
+mark('fanOn','fanOff',d.fan);
+el('upd').textContent='آخر تحديث: '+new Date().toLocaleTimeString();
+}).catch(function(){el('conn').innerHTML='<i class="fa-solid fa-circle-xmark"></i> تعذر الاتصال بالسحابة';el('conn').className='bad';});
+}
+
+function setCtl(o){
+fetch(DB+"/control.json",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)}).then(function(){setTimeout(refresh,400);});
+}
+function ctrl(dev,val){var o={mode:0};o[dev]=val;setCtl(o);}
+function setMode(m){setCtl({mode:m});}
+
+refresh();setInterval(refresh,2000);
+</script>
+</body>
+</html>
