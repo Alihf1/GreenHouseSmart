@@ -2,8 +2,16 @@
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>المحمية الزراعية الذكية</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="theme-color" content="#0d6e56">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="المحمية">
 <style>
 :root{
   --text:#f2fff9;
@@ -152,6 +160,18 @@ body.light .st-off{color:#b91c1c}
   .btns button{padding:8px 12px;font-size:12.5px}
   .device{padding:11px}
 }
+/* حقوق الملكية في أسفل الصفحة */
+.ali-table-footer {
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    background-color: transparent;
+    color: #8598b3;
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 10;
+}
 </style>
 </head>
 <body>
@@ -268,5 +288,11 @@ function setMode(m){setCtl({mode:m});}
 
 refresh();setInterval(refresh,2000);
 </script>
+    <footer class="ali-table-footer">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <img src="logo.png" alt="TECHNOLOGY.ALI Logo" style="max-width: 30px; height: auto; border-radius: 50%; background-color: rgba(0, 0, 0, 0.5); padding: 4px;">
+            <p style="margin: 0;">© 2026 جميع الحقوق محفوظة لـ <strong>TECHNOLOGY.ALI</strong></p>
+        </div>
+    </footer>
 </body>
 </html>
